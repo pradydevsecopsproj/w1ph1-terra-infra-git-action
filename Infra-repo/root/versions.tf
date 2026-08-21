@@ -6,7 +6,7 @@ terraform {
       version = ">= 6.0"
     }
   }
-  # Remote Backend
+  # Remote Backend for state file management
   backend "s3" {
     bucket       = "tfstate-dev-roottt-ap-south-1-1otw53-main-bkt" # Need to update bucket detail from "S3_bucket_remote_backend"
     key          = "vpc/dev/terraform.tfstate"
