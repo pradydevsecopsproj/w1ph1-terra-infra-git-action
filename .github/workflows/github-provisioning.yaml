@@ -121,7 +121,7 @@ jobs:
           else
             echo "WORKSPACE_NAME=dev" >> $GITHUB_ENV
             echo "tf_workspace=dev" >> $GITHUB_OUTPUT
-            echo "TF_VAR_FILE=../environments/dev.tfvars" >> $GITHUB_ENV
+            echo "TF_VAR_FILE=../environments/dev/dev.tfvars" >> $GITHUB_ENV
           fi
 
       - name: Select Terraform Workspace
@@ -213,7 +213,7 @@ jobs:
           else
             echo "WORKSPACE_NAME=dev" >> $GITHUB_ENV
             echo "tf_workspace=dev" >> $GITHUB_OUTPUT
-            echo "TF_VAR_FILE=../environments/dev.tfvars" >> $GITHUB_ENV
+            echo "TF_VAR_FILE=../environments/dev/dev.tfvars" >> $GITHUB_ENV
           fi
       - name: Select Terraform Workspace
         run: |
