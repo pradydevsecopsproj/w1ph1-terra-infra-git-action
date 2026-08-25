@@ -24,7 +24,7 @@ variable "tags" {
     Name      = "pradyumna__poc"
   }
 }
-# subnet newbit value
+# subnet newbit  value
 variable "subnet_newbits" {
   description = "Number of new bits to add to VPC CIDR to generate subnets (e.g., 8 means /24 from /16)"
   type        = number

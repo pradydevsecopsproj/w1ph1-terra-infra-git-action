@@ -19,13 +19,14 @@ on:
 
 env:
   TF_LOG: INFO
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  # AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}  // Commented to chk OIDC
+  # AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }} // Commented to chk OIDC
   # BUCKET_TF_STATE: ${{ secrets.BUCKET_TF_STATE}}
 
 permissions:
   contents: read
   pull-requests: write
+  id-token: write  # for OIDC connectivity setting
   # issues: write // current workflow doesn't have a step using this capability. So commented
 
 jobs:
@@ -42,6 +43,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials # for OIDC connectivity setting
+        uses: aws-actions/configure-aws-credentials@v6.2.3
+        with:
+          role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
+          aws-region: ap-south-1  
+          
+      - name: Test aws credentials
+        run:  aws sts get-caller-identity   
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
