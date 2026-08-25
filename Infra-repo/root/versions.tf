@@ -8,7 +8,7 @@ terraform {
   }
   # Remote Backend for state file management
   backend "s3" {
-    bucket       = "tfstate-dev-root-ap-south-1-7ndsd4-main-bkt" # Need to update bucket detail from "S3_bucket_remote_backend"
+    bucket       = "tfstate-dev-root-ap-south-1-7ndsd4-main-bkt" #Need to update bucket detail from "S3_bucket_remote_backend"
     key          = "vpc/terraform.tfstate"
     region       = "ap-south-1"
     encrypt      = true
