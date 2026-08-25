@@ -19,14 +19,15 @@ on:
 
 env:
   TF_LOG: INFO
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}  
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }} 
   # BUCKET_TF_STATE: ${{ secrets.BUCKET_TF_STATE}}
 
 permissions:
   contents: read
   pull-requests: write
-  issues: write
+  # id-token: write  # for OIDC connectivity setting
+  # issues: write // current workflow doesn't have a step using this capability. So commented
 
 jobs:
   terraform-plan:
@@ -42,6 +43,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      # - name: Configure AWS Credentials # for OIDC connectivity setting
+      #   uses: aws-actions/configure-aws-credentials@v6.2.3
+      #   with:
+      #     role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
+      #     aws-region: ap-south-1 
+      #     audience: sts.amazonaws.com
+
+      # - name: Test aws credentials
+      #   run:  aws sts get-caller-identity   
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -121,7 +132,7 @@ jobs:
           else
             echo "WORKSPACE_NAME=dev" >> $GITHUB_ENV
             echo "tf_workspace=dev" >> $GITHUB_OUTPUT
-            echo "TF_VAR_FILE=../environments/dev.tfvars" >> $GITHUB_ENV
+            echo "TF_VAR_FILE=../environments/dev/dev.tfvars" >> $GITHUB_ENV
           fi
 
       - name: Select Terraform Workspace
@@ -212,10 +223,9 @@ jobs:
             echo "TF_VAR_FILE=../environments/test/test.tfvars" >> $GITHUB_ENV
           else
             echo "WORKSPACE_NAME=dev" >> $GITHUB_ENV
-            #echo "TF_VAR_FILE=dev.tfvars" >> $GITHUB_ENV
+            echo "tf_workspace=dev" >> $GITHUB_OUTPUT
             echo "TF_VAR_FILE=../environments/dev/dev.tfvars" >> $GITHUB_ENV
           fi
-
       - name: Select Terraform Workspace
         run: |
           terraform workspace select $WORKSPACE_NAME || terraform workspace new $WORKSPACE_NAME
