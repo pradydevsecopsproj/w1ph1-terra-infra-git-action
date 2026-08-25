@@ -48,8 +48,9 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v6.2.3
         with:
           role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
-          aws-region: ap-south-1  
-          
+          aws-region: ap-south-1 
+          audience: sts.amazonaws.com
+
       - name: Test aws credentials
         run:  aws sts get-caller-identity   
 
